@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>video_new.html</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    
+ <style type="text/css">
+  .head{
+   background-color:#500707;color:white;font-weight:bold;font-size:30px;
+   text-align:center;padding:10px;    }
+  .content{
+   width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+
+
+   .label_input_video {
+                    font-size: 14px;
+                    font-family: 微軟正黑體;
+                    width: 80px;
+                    height: 28px;
+                    line-height: 28px;
+                    text-align: center;
+                    color: white;
+                    background-color: black;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    }    
+
+#modify_video_frame{
+width: 450px;
+height: 520px;
+padding: 20px;
+margin-left: 350px;
+margin-top: 50px;
+background-color: gray;
+border-radius: 10px;
+font-family: 微軟正黑體;
+text-align: center;
+}
+
+
+.text_field {
+width: 278px;
+height: 28px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 0;
+}
+  
+    
+  </style>
+  <link href="statics/css/bootstrap.min.css" rel="stylesheet">  
+  </head>
+  <body class="bg-dark">
+   <div id="container">
+        <div class="head">堯堯影音平台
+  <a style="color: aliceblue; float:right;" href="/G15/index.html" font-size:20px; >登出</a>
+  </div>
+        <div class="content text-center">
+   
+   <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+            <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+            <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+            <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+                <h3>一般會員專用</h3>
+            <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+            <h3>高級會員專用</h3>
+      <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+                <h3>管理員專用</h3>
+            <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+            <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+            <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+     </div>
+        <div class="video text-center">
+ 
+   <form class="modify_video_frame" accept-charset="utf-8">
+    <h2 style="color:rgb(255, 255, 255)">上傳影片</h2>
+
+<div class="input text required">
+        <p><label for="video_name" class="label_input_video">影片名稱：</label>
+        <input name="videoname" class="text_field" maxlength="255" type="text" id="videoname" required="required"></p>
+    </div>
+
+    <div class="input text required">
+        <p><label for="video_category" class="label_input_video">影片類型：</label>
+        <select name="category" id="category" class="text_field">
+            <option value="動作片">動作片</option>
+            <option value="喜劇片">喜劇片</option>
+            <option value="恐怖片">恐怖片</option>
+            <option value="愛情片">愛情片</option>    
+        </select></p>
+    </div>
+
+    <div class="input text required">
+        <p><label for="director" class="label_input_video">導演：</label>
+        <input name="director" class="text_field" maxlength="45" type="text" id="director" required="required"></p> 
+    </div>
+
+    <div class="input text required">
+        <p><label for="classification" class="label_input_video">分級：</label>
+        <select name="classification" id="classification" class="text_field">
+            <option value="普遍級">普遍級</option>
+            <option value="保護級">保護級</option>
+            <option value="輔導級">輔導級</option>
+            <option value="限制級">限制級</option>    
+        </select></p> 
+    </div>
+
+    <div class="input text required">
+        <p><label for="VIP" class="label_input_video"> VIP：</label>
+        <select name="VIP"  id="VIP" class="text_field">
+            <option value="0">免費</option>
+            <option value="1">VIP豪華專享</option>
+        </select></p>
+    </div>
+
+    <div class="input text required">
+        <p><label for="introduction" class="label_input_video">內容簡介：</label>
+        <textarea rows="5" cols="40" name="introduction" id="introduction" class="text_field"></textarea></p>
+</div>
+
+    <div class="input text required">
+        <p><label for="cover_path" class="label_input_video">影片封面：</label>                
+        <input name="coverpath" class="text_field" maxlength="255" type="text" id="coverpath" required="required"></p>
+     </div>
+
+    <div class="input text required">
+        <p><label for="cover_path" class="label_input_video">影片檔：</label>                
+        <input name="videopath" class="text_field" maxlength="255" type="text" id="videopath" required="required"></p>
+     </div>
+
+     <div class="submit">
+     <input type="button" class="btn btn-success" id="send" value="上傳" onclick="sendvideo();"/>
+     <input type="reset" name="Refill" class="btn btn-danger" value="取消"/>
+    </div>
+
+</form> 
+        
+        
+  </div>
+   </div>
+   <script>
+ $(document).ready(function () {
+
+
+         // 檢查影片名子不為空白
+        $("#videoname").on("input", function () {
+           
+            if ($("#videoname").val().trim() != "") {
+               
+                $("#videoname").removeClass("is-invalid");
+                $("#videoname").addClass("is-valid");
+             }   
+            else {
+               //空白情況
+                $("#videoname").removeClass("is-valid");
+                $("#videoname").addClass("is-invalid");
+              }
+        });
+
+       // 檢查導演不為空白
+        $("#director").on("input", function () {
+         if ($("#director").val().trim() != "") { 
+             $("#director").removeClass("is-invalid");
+             $("#director").addClass("is-valid");            
+            } 
+         else {        
+             $("#director").removeClass("is-valid");
+             $("#director").addClass("is-invalid");                   
+            }
+  });
+
+  //檢查簡介不為空白
+  $("#introduction").on("input", function () {
+         if ($("#introduction").val().trim() != "") { 
+             $("#introduction").removeClass("is-invalid");
+             $("#introduction").addClass("is-valid");            
+            } 
+         else {        
+             $("#introduction").removeClass("is-valid");
+             $("#introduction").addClass("is-invalid");                   
+            }
+  });  
+
+  //檢查封面不為空白
+  $("#coverpath").on("input", function () {
+         if ($("#coverpath").val().trim() != "") { 
+             $("#coverpath").removeClass("is-invalid");
+             $("#coverpath").addClass("is-valid");            
+            } 
+         else {        
+             $("#coverpath").removeClass("is-valid");
+             $("#coverpath").addClass("is-invalid");                   
+            }
+  });
+  
+  //檢查影片路徑不為空白
+  $("#videopath").on("input", function () {
+         if ($("#videopath").val().trim() != "") { 
+             $("#videopath").removeClass("is-invalid");
+             $("#videopath").addClass("is-valid");            
+            } 
+         else {        
+             $("#videopath").removeClass("is-valid");
+             $("#videopath").addClass("is-invalid");                   
+            }
+  });  
+         
+        // 檢查表單內容後送出資料
+        sendvideo=function ()  {
+        // 若有不合規範的輸入值則顯示錯誤訊息並不送出更新
+  if (
+            $(".is-invalid").html() != undefined ||
+            $("#videoname").val().trim() == "" ||
+            $("#category").val().trim() == "" ||
+   $("#introduction").val().trim() == "" ||
+            $("#VIP").val().trim() == "" ||
+            $("#coverpath").val().trim() == "" ||
+            $("#videopath").val().trim() == "" ||
+            $("#classification").val().trim() == ""
+        ) {
+            alert("請修正表單內容！");
+            return false;}
+
+         // 建立要送出資料的json
+         let data = {
+             Name : $("#videoname").val().trim(),
+             Category : $("#category").val().trim(),
+             Director: $("#director").val().trim(),
+             Introduction: $("#introduction").val().trim(),
+    Classification : $("#classification").val().trim(),
+    Vip : $("#VIP").val().trim(),
+    Coverpath: $("#coverpath").val().trim(),
+    Videopath : $("#videopath").val().trim()
+     };
+    
+         console.log(data);
+         // 轉成string以供後端讀取
+         const dataString = JSON.stringify(data);
+  
+         $.ajax({
+             url: "api/video.stfw",
+             type: "POST",
+             data: dataString,
+             crossDomain: true,
+             cache: false,
+             dataType: "json",
+             // timeout: 5000,
+             success: function (data) {
+             console.log(data);
+  
+             // 根據response訊息進行不同動作
+             if ("errors" in data) {
+                 alert(data.errors);
+             } else if ("message" in data) {
+                 alert(data.message);
+                 window.location = "home.html?id="+id+"&level="+level;
+             }
+             },
+             error: function (error) {
+                 console.log(error);
+  
+                 // 顯示錯誤訊息
+                alert(
+                 "Error code: " +
+                 error.status +
+                 "\n\nDescribtion: \n" +
+                 error.statusText
+                 );
+             },
+         });
+        };
+
+
+
+ // 取得url上的參數
+ const urlParams = new URLSearchParams(window.location.search);
+ const id = urlParams.get("id");
+ const level = urlParams.get("level");
+  
+ // 確認有要求id才進行資料查詢，否則重導至首頁
+ if (id == null || id == "") {
+   window.location = "/G15/index.html";
+ } else {
+   if(level == null || level == ""){
+  window.location = "/G15/index.html";
+   }
+   else if(level ==0){
+   // 填入button href
+   $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+    }
+    else if(level ==1){
+    // 填入button href
+    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+    }
+    else if(level ==2){
+    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+    $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+    $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+   }
+   else{
+  window.location = "/G15/index.html";
+   }
+ }
+  });
+   </script>
+  
+  </body>
+</html>

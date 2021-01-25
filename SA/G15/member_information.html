@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>member_information</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <style type="text/css">
+        .head{
+            background-color:#500707;color:white;font-weight:bold;font-size:30px;
+            text-align:center;padding:10px;    }
+        .content{
+            width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+        .members{
+            width:auto; height:auto;float:center;color:black;font-size:20px;       }
+        
+       
+        </style>
+  <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-dark">
+    <div id="container">
+        <div class="head">堯堯影音平台
+        <a style="color: aliceblue; float:right;" href="/G15/index.html" font-size:20px; >登出</a>
+        </div>
+        <div class="content text-center">
+          <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+          <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+          <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+          <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+              <h3>一般會員專用</h3>
+          <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+          <h3>高級會員專用</h3>
+        <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+              <h3>管理員專用</h3>
+          <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+          <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+          <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+    </div>
+		<div class="members text-light text-center">
+            <h2>修改/刪除會員資料</h2>
+            <div id="flashMessage" class="message" style="display: none;"></div>
+			<form id="form"  accept-charset="utf-8">
+                        <div class="input email required">
+                            <label for="email">電子信箱</label>
+                            <input name="email" maxlength="45" type="email" id="email" disabled>
+                        </div>
+                        <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                        <div class="input text required">
+                            <label for="lastname">用戶姓氏</label>
+                            <input name="lastname" maxlength="255" type="text" id="lastname" required="required">
+                        </div>
+                        <div class="input text required">
+                            <label for="firstname">用戶名字</label>
+                            <input name="firstname" maxlength="255" type="text" id="firstname" required="required">
+                        </div>
+                        <div class="input password required">
+                            <label for="password">網站密碼</label>
+                            <input name="password" maxlength="45" type="password" id="password" required="required">
+                        </div>
+                        <div class="input text required">
+                            <label for="phonenumber">手機號碼</label>
+                            <input name="phonenumber" maxlength="45" type="text" id="phonenumber" required="required">
+                        </div>
+                        <div class="input text required">
+                            <label for="level">會員級別</label>
+                            <input name="level" type="text" id="level" disabled>
+                        </div>
+                        <div class="input text required">
+                            <label for="expiretime">VIP到期日</label>
+                            <input name="expiretime"  type="date" id="expiretime" disabled>
+                        </div>
+
+                        <div class="button">
+                            <input type="button" class="btn btn-primary" value="更新會員資料" id="update">
+                            <input type="button" class="btn btn-danger" value="刪除會員資料" id="delete">    
+                        </div>
+            </form>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                 // 取得url上的參數
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get("id");
+                const level = urlParams.get("level");
+                // 確認有要求id才進行資料查詢，否則重導至首頁
+                if (id == null || id == "") {
+                    window.location = "/G15/index.html";
+                } else {
+                    if(level == null || level == ""){
+                window.location = "/G15/index.html";
+                }
+                else if(level ==0){
+                // 填入button href
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+                }
+                else if(level ==1){
+                // 填入button href
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+                }
+                else if(level ==2){
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+                $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+                $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+                }
+                else{
+                window.location = "/G15/index.html";
+                }
+                $.ajax({
+                        url: "api/member.stfw",
+                        type: "GET",
+                        crossDomain: true,
+                        cache: false,
+                        data: "id=" + id,
+                        dataType: "json",
+                        timeout: 5000,
+                        success: function (data) {
+                        console.log(data);
+                        // 根據response訊息進行不同動作
+                            if ("errors" in data) {
+                                alert(data.errors);
+                            } else if ("message" in data) {
+                                // 填入資料與紀錄帳號資料以回傳進行更新
+                                $("#lastname").val(data.response.data[0]["lastname"]);
+                                $("#firstname").val(data.response.data[0]["firstname"]);
+                                $("#email").val(data.response.data[0]["email"]);
+                                $("#password").val(data.response.data[0]["password"]);
+                                $("#phonenumber").val(data.response.data[0]["phonenumber"]);
+
+                                
+                                if(data.response.data[0]["level"]==1){
+                                  testvip="VIP白金會員";
+                                }else if(data.response.data[0]["level"]==2){
+                                    testvip="管理員";
+                                }else{
+                                  testvip="一般會員";
+                                }
+                                console.log(testvip);
+
+                                $("#level").val(testvip);
+                                $("#expiretime").val(data.response.data[0]["expiretime"]);
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            // 顯示錯誤訊息
+                            alert(
+                                "Error code: " +
+                                error.status +
+                                "\n\nDescribtion: \n" +
+                                error.statusText
+                            );
+                        },
+                    });
+}
+
+  // 密碼格式規則
+    //const password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    // 檢查表單內容後送出資料
+    $("#update").click(function () {
+    // 若有不合規範的輸入值則顯示錯誤訊息並不送出更新
+        if (
+            $(".is-invalid").html() != undefined ||
+            $("#lastname").val().trim() == "" ||
+            $("#firstname").val().trim() == "" ||
+            $("#password").val().trim() == "" ||
+            $("#phonenumber").val().trim() == ""
+        ) {
+            alert("請修正表單內容！");
+            return false;}
+
+    // 建立要送出資料的json
+    let data = {
+        id: parseInt(id, 10),
+        firstname: $("#firstname").val().trim(),
+        lastname: $("#lastname").val().trim(),
+        password: $("#password").val().trim(),
+        phonenumber: $("#phonenumber").val().trim(),
+    };
+    console.log(data);
+    // 轉成string以供後端讀取
+    const dataString = JSON.stringify(data);
+
+    $.ajax({
+        url: "api/member.stfw",
+        type: "PUT",
+        data: dataString,
+        crossDomain: true,
+        cache: false,
+        dataType: "json",
+      // timeout: 5000,
+        success: function (data) {
+        console.log(data);
+
+        // 根據response訊息進行不同動作
+        if ("errors" in data) {
+            alert(data.errors);
+        } else if ("message" in data) {
+            alert(data.message);
+            // 重導至帳號資料頁面
+            window.location = "home.html?id="+id+"&level="+level;
+        }
+        },
+        error: function (error) {
+            console.log(error);
+
+            // 顯示錯誤訊息
+            alert(
+            "Error code: " +
+            error.status +
+            "\n\nDescribtion: \n" +
+            error.statusText
+            );
+        },
+    });
+    });
+    //delete member
+    $("#delete").click(function () {
+    // 建立要送出資料的json
+    let data = {
+        id: parseInt(id, 10)
+    };
+    console.log(data);
+    // 轉成string以供後端讀取
+    const dataString = JSON.stringify(data);
+
+    $.ajax({
+        url: "api/member.stfw",
+        type: "DELETE",
+        data: dataString,
+        crossDomain: true,
+        cache: false,
+        dataType: "json",
+        timeout: 5000,
+        success: function (data) {
+        console.log(data);
+
+        // 根據response訊息進行不同動作
+        if ("errors" in data) {
+            alert(data.errors);
+        } else if ("message" in data) {
+            alert(data.message);
+            // 重導至帳號資料頁面
+            window.location = "index.html";
+        }
+        },
+        error: function (error) {
+            console.log(error);
+            // 顯示錯誤訊息
+            alert(
+            "Error code: " +
+            error.status +
+            "\n\nDescribtion: \n" +
+            error.statusText
+            );
+        },
+    });
+    });
+});
+
+            </script>
+        </div>
+    </div>
+</body>
+</html>

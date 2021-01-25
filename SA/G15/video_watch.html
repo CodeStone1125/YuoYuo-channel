@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>video_watch.html</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+   
+    <style type="text/css">
+    .head{
+      background-color:#500707;color:white;font-weight:bold;font-size:30px;
+      text-align:center;padding:10px;    }
+    .content{
+        width:320px;float:left;background-color:#2c2929;height:940px;color:white;font-size:20px;    }
+    .video{
+        width: 1000px;height:900px;float:left;color:black;font-size:30px;  } 
+    </style>
+
+    <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <body class="bg-dark">
+
+      <div id="container" class="bg-dark">
+        <div class="head">
+          <a style="color: aliceblue; float:center; font-size:30px;" >堯堯影音平台</a>
+          <a style="color: rgb(194, 146, 73); float:right; font-size:20px;" href="/G15/index.html"  >登出</a>
+        </div>
+        <div class="content text-center">
+          <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+          <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+          <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+          <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+          <h3>一般會員專用</h3>
+          <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+          <h3>高級會員專用</h3>
+          <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+          <h3>管理員專用</h3>
+          <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+          <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+          <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+    </div>
+
+        <div class="video"><!-- 影片本體 -->
+                   
+          <h2 id="vname" style="color:rgb(236, 206, 188);"></h2>
+          <video id="videopath" controls></video>
+                                                          
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                 // 取得url上的參數
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get("id");
+                const level = urlParams.get("level");
+                const videoid = urlParams.get("videoid");
+                // 確認有要求id才進行資料查詢，否則重導至首頁
+                if (level == 0 ) {
+
+alert("此影片為VIP豪華會員專享\n請購買VIP!!");
+window.location = "/G15/purchase.html?id="+id+"&level="+level;
+}
+               
+
+
+
+                if (id == null || id == "") {
+                window.location = "/G15/index.html";
+                } else {
+                if(level == null || level == ""){
+                    window.location = "/G15/index.html";
+                }
+                else if(level ==0){
+                // 填入button href
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+                 }
+                else if(level ==1){
+                // 填入button href
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+                }
+                else if(level ==2){
+                $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+                $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+                $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+                }
+                else{
+                window.location = "/G15/index.html";
+                }}
+                $.ajax({
+                        url: "api/video.stfw",
+                        type: "GET",
+                        crossDomain: true,
+                        cache: false,
+                        data: "id=" + videoid,
+                        dataType: "json",
+                        timeout: 5000,
+                        success: function (data) {
+                        console.log(data);
+
+                        // 根據response訊息進行不同動作
+                            if ("errors" in data) {
+                                alert(data.errors);
+                            } else if ("message" in data) {
+                                // 填入資料與紀錄帳號資料以回傳進行更新
+
+                                document.getElementById("vname").innerHTML=data.response.data[0]["Name"]; 
+                                $("#videopath").attr("src", "statics/video/"+data.response.data[0]["Videopath"]);
+
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            // 顯示錯誤訊息
+                            alert(
+                                "Error code: " +
+                                error.status +
+                                "\n\nDescribtion: \n" +
+                                error.statusText
+                            );
+                        },
+                    });//aject的下括號
+
+
+
+                    let data = {
+                      memberid : id,
+                      videoid : videoid
+                      };
+
+                      const dataString = JSON.stringify(data);
+
+
+if(level!=0){
+
+                    $.ajax({
+             url: "api/videohistory.stfw",
+
+
+             type: "POST",
+             data: dataString,
+             crossDomain: true,
+             cache: false,
+             dataType: "json",
+             // timeout: 5000,
+             success: function (data) {
+             console.log(data);
+  
+             // 根據response訊息進行不同動作
+             if ("errors" in data) {
+                 alert(data.errors);
+             } else if ("message" in data) {
+             }
+             },
+             error: function (error) {
+                 console.log(error);
+  
+                 // 顯示錯誤訊息
+                alert(
+                 "Error code: " +
+                 error.status +
+                 "\n\nDescribtion: \n" +
+                 error.statusText
+                 );
+             },
+         });//第二個aject下括號
+        }
+
+         
+
+                  });
+       
+    </script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>purchase</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    
+    <style type="text/css">
+  .head{
+      background-color:#500707;color:white;font-weight:bold;font-size:30px;
+      text-align:center;padding:10px;    }
+  .content{
+      width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+
+  
+ 
+  </style>
+
+  <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark">
+  <div id="container" class="bg-dark">
+      <div class="head">
+        <a style="color: aliceblue; float:center; font-size:30px;" >堯堯影音平台</a>
+ 
+        <a style="color: rgb(194, 146, 73); float:right; font-size:20px;" href="/G15/index.html"  >登出</a>
+      </div>
+      <div class="content text-center">
+        <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+        <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+        <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+        <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+        <h3>一般會員專用</h3>
+        <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+        <h3>高級會員專用</h3>
+        <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+        <h3>管理員專用</h3>
+        <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+        <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+        <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+  </div>
+        <div class="video text-center">
+		    <form class="text-light text-center">
+                <br><h1 style="color:rgb(238, 217, 32);">VIP豪華會員</h1><br><br>
+		        購買期限：<select name="Good" id="type">
+				    <option value="6month">半年</option>
+				    <option value="12month">1年</option> 	</select><br><br>
+                付款方式：
+                <select name="method" id="payment">
+				    <option value="creditcard">信用卡</option><br>
+				    <option value="conveniencestore">超商繳費</option> 	</select>
+                <br><br>
+
+                <input type="submit" class="btn btn-primary" name="Send" id="send" value="確定"/>
+                <input type="button" id="watchvideo" class="btn btn-outline-danger" value="取消" onclick="goback();"/>
+			</form>
+		</div>
+      </div>
+      <script>
+          $(document).ready(function () {
+
+
+            goback=function(){
+              window.location = "home.html?id=" + id + "&level="+level;
+        };
+  // 取得url上的參數
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  const level = urlParams.get("level");
+
+  // 確認有要求id才進行資料查詢，否則重導至首頁
+  if (id == null || id == "") {
+    window.location = "/G15/index.html";
+  } else {
+    if(level == null || level == ""){
+      window.location = "/G15/index.html";
+    }
+    else if(level ==0){
+    // 填入button href
+    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+    }
+    else if(level ==1){
+    // 填入button href
+    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+    }
+    else if(level ==2){
+    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+    $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+    $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+    $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+    }
+    else{
+        window.location = "/G15/index.html";
+    }
+  }
+  $("#send").click(function () {
+    // 若有不合規範的輸入值則顯示錯誤訊息並不送出更新
+        if (
+            $("select#type").val().trim() == "" ||
+            $("select#payment").val().trim() == ""
+        ) {
+            alert("請選擇表單內容！");
+            return false;}
+
+    // 建立要送出資料的json
+    let data = {
+        id: parseInt(id, 10),
+        type: $("select#type").val().trim(),
+        payment: $("select#payment").val().trim()
+    };
+    console.log(data);
+    // 轉成string以供後端讀取
+    const dataString = JSON.stringify(data);
+
+    $.ajax({
+        url: "api/order.stfw",
+        type: "POST",
+        data: dataString,
+        crossDomain: true,
+        cache: false,
+        dataType: "json",
+      // timeout: 5000,
+        success: function (data) {
+
+        
+        console.log(data);
+
+        // 根據response訊息進行不同動作
+        if ("errors" in data) {
+            alert(data.errors);
+        } else if ("message" in data) {
+            alert(data.message);
+            // 重導至帳號資料頁面
+
+            alert("充值成功!");
+            window.location = "index.html";
+        }
+        },
+        error: function (error) {
+            console.log(error);
+
+            // 顯示錯誤訊息
+            alert(
+            "Error code: " +
+            error.status +
+            "\n\nDescribtion: \n" +
+            error.statusText
+            );
+        },
+    });
+    });
+});
+        </script>
+    </body>
+</html>

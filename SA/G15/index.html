@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="statics/css/login.css"/>
+    <script src="statics/js/jquery-3.4.1.min.js"></script>
+    <style type="text/css">
+    .head{background-color:#500707;color:white;font-weight:bold;font-size:30px;
+        text-align:center;padding:10px;}
+    </style>
+    <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <body>
+  	  <div class="head">堯堯影音平台
+      </div>
+	<div id="login_frame" >
+		<form method="post" action="login.js">
+     
+		  <p><label class="label_input">帳號 </label><input type="text" id="email" placeholder="輸入電子信箱" class="text_field"/></p>
+		  <p><label class="label_input">密碼 </label><input type="password" id="password" placeholder="輸入密碼" class="text_field"/></p>
+		  <div id="login_control">
+		    <input type="button" id="login" class="btn btn-primary" value="登入"/>
+		    <input type="button" id="register" value="註冊" class="btn btn-light" onclick="location.href='register.html'"/><!-- 連接到註冊頁面 -->
+		  </div>
+	  </form>
+  </div>
+  <script>
+$(document).ready(function () {
+  // 信箱格式規則
+  const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+
+  //檢查信箱合乎信箱規則
+  $("#email").on("input", function () {
+    if (emailRule.test($("#email").val().trim())) {
+      $("#email").removeClass("is-invalid");
+      $("#email").addClass("is-valid");
+    } else {
+      $("#email").removeClass("is-valid");
+      $("#email").addClass("is-invalid");
+    }
+  });
+
+  // 檢查表單內容後送出資料
+  $("#login").click(function () {
+    // 若有不合規範的輸入值則顯示錯誤訊息並不送出更新
+    if (
+      $(".is-invalid").html() != undefined ||
+      $("#email").val().trim() == "" ||
+      $("#password").val().trim() == ""
+    ) {
+      alert("請修正表單內容！");
+
+      return false;
+    }
+
+    // 建立要送出資料的json
+    let data = {
+      email: $("#email").val().trim(),
+      password: $("#password").val().trim(),
+    };
+    console.log(data);
+    // 轉成string以供後端讀取
+    const dataString = JSON.stringify(data);
+
+    $.ajax({
+      url: "api/login.stfw",
+      type: "POST",
+      data: dataString,
+      crossDomain: true,
+      cache: false,
+      dataType: "json",
+      // timeout: 5000,
+      success: function (data) {
+        console.log(data);
+
+        // 根據response訊息進行不同動作
+        if ("errors" in data) {
+          alert(data.errors);
+        } else if ("message" in data) {
+          $.ajax({
+      url: "api/login.stfw",
+      type: "GET",
+      crossDomain: true,
+      cache: false,
+      dataType: "json",
+      timeout: 5000,
+      success: function (data) {
+        console.log(data);
+
+        // 根據response訊息進行不同動作
+        if ("errors" in data) {
+          alert(data.errors);
+        } else if ("message" in data) {
+          id = data.id;
+          level = data.level;
+          window.location = "/G15/home.html?id="+id+"&level="+level;
+        }
+      },
+      error: function (error) {
+        console.log(error);
+
+        // 顯示錯誤訊息
+        alert(
+          "Error code: " +
+            error.status +
+            "\n\nDescribtion: \n" +
+            error.statusText
+        );
+      },
+    });
+        }
+      },
+      error: function (error) {
+        console.log(error);
+
+        // 顯示錯誤訊息
+        alert(
+          "Error code: " +
+            error.status +
+            "\n\nDescribtion: \n" +
+            error.statusText
+        );
+      },
+    })
+  });
+});
+</script>
+  </body>
+</html>

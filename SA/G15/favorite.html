@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>favorite</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    
+    <style type="text/css">
+        .head{
+            background-color:#500707;color:white;font-weight:bold;font-size:30px;
+            text-align:center;padding:10px;    }
+        .content{
+            width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+        .video{
+            width:auto; height:auto;float:left;background-color:silver;color:black;font-size:20px;       }
+        
+       
+        </style>
+      
+        <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+      </head>
+  <body class="bg-dark">
+   <div id="container">
+        <div class="head">堯堯影音平台</div>
+        <div class="content text-center">
+            <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+            <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+            <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+            <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+            <h3>一般會員專用</h3>
+            <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+            <h3>高級會員專用</h3>
+            <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+            <h3>管理員專用</h3>
+            <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+            <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+            <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+      </div>
+  <div class="video text-center">
+    <h2>我的最愛</h2>
+      <table id="table"class="table table-striped table-dark table-bordered">
+          <thead>
+            <tr>
+
+                <th>影片編號</th>
+                <th>影片名</th>
+            </tr>
+        </thead>
+                <tbody>
+                </tbody>
+            </table>
+            
+            
+            
+  </div>
+      </div>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      // 取得url上的參數
+          const urlParams = new URLSearchParams(window.location.search);
+          const id = urlParams.get("id");
+          const level = urlParams.get("level");
+          getFavorite();
+          // 確認有要求id才進行資料查詢，否則重導至首頁
+          if (id == null || id == "") {
+            window.location = "/G15/index.html";
+          } else {
+            if(level == null || level == ""){
+              window.location = "/G15/index.html";
+            }
+            else if(level ==0){
+            // 填入button href
+            $("#home").attr("href", "home.html?id="+id+"&level="+level);
+            $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+            $("#history").attr("href", "history.html?id="+id+"&level="+level);
+            $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+            $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+            }
+            else if(level ==1){
+            // 填入button href
+            $("#home").attr("href", "home.html?id="+id+"&level="+level);
+            $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+            $("#history").attr("href", "history.html?id="+id+"&level="+level);
+            $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+            $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+            }
+            else if(level ==2){
+            $("#home").attr("href", "home.html?id="+id+"&level="+level);
+            $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+            $("#history").attr("href", "history.html?id="+id+"&level="+level);
+            $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+            $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+            $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+            $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+            }
+            else{
+              window.location = "/G15/index.html";
+            }
+          }
+
+          goback=function(){
+
+            window.location = "favorite.html?id=" + id + "&level="+level;
+
+          };
+
+
+
+
+
+          
+
+
+
+          function getFavorite() {
+            // 發出POST的GET請求取得所有會員列表
+            let data = {
+            id: parseInt(id, 10)
+            };
+            var data_string = JSON.stringify(data);
+            $.ajax({
+              type: "PUT",
+              url: "api/favorite.stfw",
+              crossDomain: true,
+              data: data_string,
+              cache: false,
+              dataType: 'json',
+              timeout: 5000,
+              success: function (response) {
+                if(response.status == 200){
+                  updateTable(response.response.data);
+                }
+                console.log(response);
+              },
+              error: function () {
+                alert("無法連線到伺服器！");
+              }
+            });
+          }
+          function updateTable(data) {
+            $("#table > tbody").empty();
+            var table_html = '';
+            $.each(data, function(index, value) {
+            table_html += '<tr><td scope="row">' + value['Videoid'] + '</td>';
+            table_html += '<td>' + value['Videoname'] + '</td>';
+            table_html += '<td><a href="javascript: deletef(' + value['FavoriteId'] + ');">刪除</a></td>';
+            table_html += '</tr>';
+            })
+
+                    $("#table > tbody").append(table_html);
+                }
+      });
+
+
+    function deletef(id) {
+                    var check = window.confirm("確認刪除喜愛？");
+                    if (check == true) {
+                        console.log("You pressed OK!");
+                        var request = {'id': id};
+                        var data_string = JSON.stringify(request);
+                        $.ajax({
+                            type: "DELETE",
+                            url: "api/favorite.stfw",
+                            crossDomain: true,
+                            data: data_string,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    $("#flashMessage").html("成功! 已經成功刪除喜愛...");
+                                    $("#flashMessage").show();
+                                    
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                        });
+                    }
+                    else {
+                        console.log("You pressed Cancel!");
+                    }
+
+                    goback();
+                }
+    </script>
+  </body>
+</html>

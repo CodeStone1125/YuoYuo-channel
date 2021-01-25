@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>register.html</title>
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+    <style type="text/css">
+ .head{
+      background-color:#500707;color:white;font-weight:bold;font-size:30px;
+      text-align:center;padding:10px;    }
+  .content{
+      width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+    </style>
+<link href="statics/css/bootstrap.min.css" rel="stylesheet">  
+  </head>
+  <body class="bg-dark">
+     <div id="container">
+        <div class="head">堯堯影音平台</div>
+        
+        <div id="content" class="text-center">
+            <br><h2 class="text-light">註冊會員</h2><br><br>
+            
+            <div id="flashMessage" class="message" style="display: none;"></div>
+
+
+            <form id="form" accept-charset="utf-8">
+                        <div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="member_last_name" class="text-light">用戶姓氏:</label>
+                            <input name="last_name" maxlength="255" type="text" id="lastname" placeholder="輸入姓氏" required="required"><br><br>
+                        </div>
+                        <div class="input text required">
+                            <label for="member_first_name" class="text-light">用戶名字:</label>
+                            <input name="first_name" maxlength="255" type="text" id="firstname" placeholder="輸入名字" required="required"><br><br>
+                        </div>
+                        <div class="input email required">
+                            <label for="account_ID" class="text-light">電子信箱:</label>
+                            <input name="email" maxlength="45" type="email" id="email" placeholder="輸入電子信箱" required="required"><br><br>
+                        </div>
+                        <div class="input password required">
+                            <label for="account_passwords" class="text-light">網站密碼:</label>
+                            <input name="password" maxlength="45" type="password" id="password" placeholder="輸入密碼" required="required"><br><br>
+                        </div>
+                        <div class="input text required">
+                            <label for="phone_number" class="text-light">手機號碼:</label>
+                            <input name="phone" maxlength="45" type="text" id="phonenumber" placeholder="輸入電話" required="required"><br><br>
+                        </div>
+                        <div class="submit">
+                            <input type="button"  class="btn btn-primary"  value="註冊" id="submit">
+                            <input type="button" id="watchvideo" class="btn btn-outline-danger" value="取消" onclick="goback();"/><!-- 連接到首頁 -->
+                        </div>
+            </form>
+            
+            <script>
+                $(document).ready(function() {
+
+
+                    goback=function(){
+          window.location = "index.html?id=" + id + "&level="+level;
+        };
+
+         // 密碼格式規則
+         const password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+         const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+ 
+
+         // 檢查姓氏不為空白
+          $("#lastname").on("input", function () {
+           
+              if ($("#lastname").val().trim() != "") {
+               
+                   $("#lastname").removeClass("is-invalid");
+                  $("#lastname").addClass("is-valid");
+                 }   
+              else {
+               
+                  $("#lastname").removeClass("is-valid");
+                  $("#lastname").addClass("is-invalid");
+              }
+          });
+
+       // 檢查名字不為空白
+       $("#firstname").on("input", function () {
+        if ($("#firstname").val().trim() != "") { 
+            $("#firstname").removeClass("is-invalid");
+               $("#firstname").addClass("is-valid");            
+           } 
+        else {        
+            $("#firstname").removeClass("is-valid");
+               $("#firstname").addClass("is-invalid");                   
+           }
+       });
+         
+         //檢查信箱合乎信箱規則
+         $("#email").on("input", function () {
+           if (emailRule.test($("#email").val().trim())) {
+             $("#email").removeClass("is-invalid");
+             $("#email").addClass("is-valid");
+           } else {
+             $("#email").removeClass("is-valid");
+             $("#email").addClass("is-invalid");
+           }
+             });
+         
+       //檢查password合乎password規則
+       $("#password").on("input", function () {
+           if (password_rule.test($("#password").val().trim())) {
+               $("#password").removeClass("is-invalid");
+               $("#password").addClass("is-valid");
+           } else {
+               $("#password").removeClass("is-valid");
+               $("#password").addClass("is-invalid");
+           }
+       });
+          // 檢查phone不為空白
+          $("#phonenumber").on("input", function () {
+              if ($("#phonenumber").val().trim() != "") {
+                  $("#phonenumber").removeClass("is-invalid");
+                  $("#phonenumber").addClass("is-valid");
+              } else {
+                  $("#phonenumber").removeClass("is-valid");
+                  $("#phonenumber").addClass("is-invalid");
+              }
+          });
+          // 檢查表單內容後送出資料
+          $("#submit").click(function () {
+          // 若有不合規範的輸入值則顯示錯誤訊息並不送出更新
+              if (
+               $(".is-invalid").html() != undefined ||
+               $("#lastname").val().trim() == "" ||
+                  $("#firstname").val().trim() == "" ||
+                  $("#email").val().trim() == "" ||
+                  $("#password").val().trim() == "" ||
+                  $("#phonenumber").val().trim() == ""
+              ) {
+                  alert("請修正表單內容！");
+                  return false;}
+
+          // 建立要送出資料的json
+          let data = {
+              lastname : $("#lastname").val().trim(),
+               firstname : $("#firstname").val().trim(),
+                 email: $("#email").val().trim(),
+                 password: $("#password").val().trim(),
+              phonenumber : $("#phonenumber").val().trim(),
+
+          };
+          console.log(data);
+          // 轉成string以供後端讀取
+          const dataString = JSON.stringify(data);
+  
+          $.ajax({
+              url: "api/member.stfw",
+              type: "POST",
+              data: dataString,
+              crossDomain: true,
+              cache: false,
+              dataType: "json",
+            // timeout: 5000,
+              success: function (data) {
+              console.log(data);
+  
+              // 根據response訊息進行不同動作
+              if ("errors" in data) {
+                  alert(data.errors);
+              } else if ("message" in data) {
+                  alert(data.message);
+                  // 重導至帳號資料頁面
+                  window.location = "index.html";
+              }
+              },
+              error: function (error) {
+                  console.log(error);
+  
+                  // 顯示錯誤訊息
+                  alert(
+                  "Error code: " +
+                  error.status +
+                  "\n\nDescribtion: \n" +
+                  error.statusText
+                  );
+              },
+          });
+          });});
+            </script>
+            
+            
+        </div>
+    </div> 
+  </body>
+</html>

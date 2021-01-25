@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<web-app>
+    <servlet>
+        <servlet-name>member</servlet-name>
+        <servlet-class>controller.MemberController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>member</servlet-name>
+        <url-pattern>/api/member.stfw</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>order</servlet-name>
+        <servlet-class>controller.OrderController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>order</servlet-name>
+        <url-pattern>/api/order.stfw</url-pattern>
+    </servlet-mapping>
+
+        <servlet>
+        <servlet-name>login</servlet-name>
+        <servlet-class>controller.LoginController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>login</servlet-name>
+        <url-pattern>/api/login.stfw</url-pattern>
+    </servlet-mapping>
+
+     <servlet>
+        <servlet-name>video</servlet-name>
+        <servlet-class>controller.VideoController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>video</servlet-name>
+        <url-pattern>/api/video.stfw</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>videohistory</servlet-name>
+        <servlet-class>controller.VideohistoryController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>videohistory</servlet-name>
+        <url-pattern>/api/videohistory.stfw</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>favorite</servlet-name>
+        <servlet-class>controller.VideofavoriteController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>favorite</servlet-name>
+        <url-pattern>/api/favorite.stfw</url-pattern>
+    </servlet-mapping>
+
+
+</web-app>

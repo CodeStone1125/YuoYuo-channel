@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>member_list.html</title>
+        <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+       
+        <style type="text/css">
+        .head{
+            background-color:#500707;color:white;font-weight:bold;font-size:30px;
+            text-align:center;padding:10px;    }
+        .content{
+            width:20%; height:auto; float:left;background-color:#2c2929;color:white;font-size:20px;    }
+        .members{
+            width:auto; height:auto;float:left;background-color:silver;color:black;font-size:20px;       }
+        
+       
+        </style>
+      
+      <link href="statics/css/bootstrap.min.css" rel="stylesheet">
+   </head>
+   <body class="bg-dark">
+    <div id="container" class="bg-dark">
+        <div class="head">
+          <a style="color: aliceblue; float:center; font-size:30px;" >堯堯影音平台</a>
+          <a style="color: rgb(194, 146, 73); float:right; font-size:20px;" href="/G15/index.html"  >登出</a>
+        </div>
+        <div class="content text-center col-md-3">
+          <a id="home" type="button" style="color:gray">首頁</a><br><br><!-- 會員資料頁面 -->
+          <a id="member_information" type="button" style="color:gray">會員資料</a><br><br><!-- 會員資料頁面 -->
+          <a id="history" style="color:gray">影片觀看紀錄</a><br><br><!-- 影片觀看紀錄頁面 -->
+          <a id="favorite" style="color:gray">最愛影片</a><br><br><!-- 最愛影片頁面 -->
+          <h3>一般會員專用</h3>
+          <a id="purchase" style="color:gray">購買VIP</a><br><br><!-- 購買會員頁面 -->
+          <h3>高級會員專用</h3>
+          <a id="refund" style="color:gray">退費VIP</a><br><br><!-- 購買會員頁面 -->
+          <h3>管理員專用</h3>
+          <a id="video_new" style="color:gray">上傳影片</a><br><br><!-- 上傳影片頁面 -->
+          <a id="member_list" style="color:gray">查看所有會員資料</a><br><br><!-- 所有會員清單頁面 -->
+          <a id="video_information" style="color:gray">查看所有影片資料</a><br><br><!-- 所有影片清單頁面 -->
+    </div>
+  
+
+            <div class="members text-center col-md-9">
+                <h2>所有會員清單</h2><!-- 所有影片頁面 -->
+        
+                <div>
+                    <table id="table" class="table table-striped table-dark table-bordered">
+                        <thead>
+                            <tr>
+                                <th>編號</th>
+                                <th>姓氏</th>
+                                <th>姓名</th>
+                                <th>電子郵件</th>
+                                <th>電話</th>
+                                <th>會員等級</th>
+                                <th>VIP到期日期</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    
+                            
+                </div>
+    
+            </div>             
+            
+            <script type="text/javascript">
+                // 全域變數紀錄SQL指令下的次數
+                var sql_num = 0;
+                function deleteMember(id) {
+                    var check = window.confirm("確認刪除會員？");
+                    if (check == true) {
+                        console.log("You pressed OK!");
+                        var request = {'id': id};
+                        var data_string = JSON.stringify(request);
+                        $.ajax({
+                            type: "DELETE",
+                            url: "api/member.stfw",
+                            crossDomain: true,
+                            data: data_string,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    $("#flashMessage").html("成功! 已經成功刪除會員...");
+                                    $("#flashMessage").show();
+                                    getAllMember();
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                        });
+                    }
+                    else {
+                        console.log("You pressed Cancel!");
+                    }
+                }
+
+                function getAllMember() {
+                    // 發出POST的GET請求取得所有會員列表
+                    $.ajax({
+                            type: "GET",
+                            url: "api/member.stfw",
+                            crossDomain: true,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    updateTable(response.response.data);
+                                    updateSQLTable(response.response);
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                    });
+                }
+                
+                // 更新會員列表表格
+                function updateTable(data) {
+                    $("#table > tbody").empty();
+                    var table_html = '';
+                    $.each(data, function(index, value) {
+                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
+                        table_html += '<td>' + value['lastname'] + '</td>';
+                        table_html += '<td>' + value['firstname'] + '</td>';
+                        table_html += '<td>' + value['email'] + '</td>';
+                        table_html += '<td>' + value['phonenumber'] + '</td>';
+                        table_html += '<td>' + value['level'] + '</td>';
+                        table_html += '<td>' + value['expiretime'] + '</td>';
+                        table_html += '<td>' + '<a href="member_information.html?id=' + value['id'] + '&level='+level+'">編輯</a> | ';
+                        table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
+                    })
+
+                    $("#table > tbody").append(table_html);
+                }
+                
+                // 更新SQL指令歷史表格
+                function updateSQLTable(data) {
+                    $("#sql_log > tbody").empty();
+                    var time = (data.time / 1000000).toFixed(2);
+                    var table_html = "";
+                    
+                    sql_num = 0;
+                    sql_num += 1
+
+                    table_html += '<tr>';
+                    table_html += '<td>' + sql_num + '</td>';
+                    table_html += '<td>' + data.sql + '</td>';
+                    table_html += '<td style="text-align: right">' + '0' + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + time + '</td>';
+                    table_html += '</tr>';
+                    $("#sql_log > tbody").append(table_html);
+                    $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
+                }
+
+                $(document).ready(function() {
+                    getAllMember();
+                });
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get("id");
+                const level = urlParams.get("level");
+                // 確認有要求id才進行資料查詢，否則重導至首頁
+                if (id == null || id == "") {
+                    window.location = "/G15/index.html";
+                } else {
+                    if(level == null || level == ""){
+                    window.location = "/G15/index.html";
+                    }
+                    else if(level ==0){
+                    // 填入button href
+                    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                    $("#purchase").attr("href", "purchase.html?id="+id+"&level="+level);
+                    }
+                    else if(level ==1){
+                    // 填入button href
+                    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                    $("#refund").attr("href", "refund.html?id="+id+"&level="+level);
+                    }
+                    else if(level ==2){
+                    $("#home").attr("href", "home.html?id="+id+"&level="+level);
+                    $("#member_information").attr("href", "member_information.html?id="+id+"&level="+level);
+                    $("#history").attr("href", "history.html?id="+id+"&level="+level);
+                    $("#favorite").attr("href", "favorite.html?id="+id+"&level="+level);
+                    $("#video_new").attr("href", "video_new.html?id="+id+"&level="+level);
+                    $("#member_list").attr("href", "member_list.html?id="+id+"&level="+level);
+                    $("#video_information").attr("href", "video_information.html?id="+id+"&level="+level);
+                    }
+                    else{
+                    window.location = "/G15/index.html";
+                    }
+                }
+                
+
+            </script>      
+    </div>
+   </div>
+  </body>
+</html>
